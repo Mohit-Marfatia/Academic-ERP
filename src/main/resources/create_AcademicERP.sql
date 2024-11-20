@@ -2,13 +2,13 @@ CREATE DATABASE IF NOT EXISTS AcademicERP;
 
 USE AcademicERP;
 
-CREATE Departments (
+CREATE TABLE departments (
     department_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255),
     capacity INT
 );
 
-CREATE Employees(
+CREATE TABLE employees(
     employee_id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(255),
     last_name VARCHAR(255),
@@ -19,7 +19,7 @@ CREATE Employees(
     department INT
 );
 
-CREATE Employee_Salary(
+CREATE TABLE employee_salary(
     id INT AUTO_INCREMENT PRIMARY KEY,
     employee_id INT,
     payment_date DATE,
@@ -27,15 +27,8 @@ CREATE Employee_Salary(
     description TEXT
 );
 
-CREATE Employee_Accounts(
+CREATE TABLE employee_accounts(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    employee_id INT, 
-    credit_date DATE,
+    employee_id INT,
     employee_balance DECIMAL(10,2)
 );
-
-CREATE Employee_Auth(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(50) NOT NULL
-)

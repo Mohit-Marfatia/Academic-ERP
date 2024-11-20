@@ -1,21 +1,16 @@
 USE AcademicERP;
 
-ALTER TABLE Employees
+ALTER TABLE employees
 ADD CONSTRAINT fk_employees_dempartment
 FOREIGN KEY (department)
-REFRENCES Departments(department_id);
+REFERENCES departments(department_id);
 
-ALTER TABLE Employee_Salary
+ALTER TABLE employee_salary
 ADD CONSTRAINT fk_employees_salary
 FOREIGN KEY (employee_id)
-REFRENCES Employees(employee_id);
+REFERENCES employees(employee_id);
 
-ALTER TABLE Employee_Accounts
+ALTER TABLE employee_accounts
 ADD CONSTRAINT fk_employees_accounts
 FOREIGN KEY (employee_id)
-REFRENCES Employees(employee_id);
-
-ALTER TABLE Employee_Auth
-ADD CONSTRAINT fk_employees_auth
-FOREIGN KEY (email)
-REFRENCES Employees(email);
+REFERENCES employees(employee_id);
