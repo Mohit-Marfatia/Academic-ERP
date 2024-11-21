@@ -26,17 +26,6 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.updatePassword(employeeRequest));
     }
 
-    @PostMapping()
-    public ResponseEntity<EmployeeAuthResponse> loginEmployee(@RequestBody @Valid LoginRequest loginRequest) {
-        EmployeeAuthResponse employeeAuthResponse = employeeService.loginCustomer(loginRequest);
-        if (employeeAuthResponse.statusCode() != 201) {
-            return ResponseEntity.ok(employeeService.loginCustomer(loginRequest));
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(employeeAuthResponse);
-        }
-
-    }
-
     @GetMapping()
     public ResponseEntity<List<EmployeeResponse>> getEmployees(@RequestHeader(name="Authorization") String authToken) {
         String token = authToken.split(" ")[1].trim();

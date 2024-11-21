@@ -46,7 +46,7 @@ public class EmployeeService {
             employee = optionalEmployee.get();
             if (encryptionService.verifyPassword(request.password(), employee.getPassword())) {
                 if (Objects.equals(employee.getDepartment().getName(), "Accounts")) {
-                    return new EmployeeAuthResponse("jwtHelper.generateToken(employee.getEmployeeId()", "Login Successful", 201);
+                    return new EmployeeAuthResponse(jwtHelper.generateToken(employee.getEmployeeId()), "Login Successful", 201);
                 } else return new EmployeeAuthResponse("null", "Only Accounts Department can access this feature!", 401);
             } else return new EmployeeAuthResponse("null", "Wrong Password!", 401);
         }
