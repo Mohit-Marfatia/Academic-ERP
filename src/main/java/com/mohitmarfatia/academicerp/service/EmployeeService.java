@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -42,7 +43,11 @@ public class EmployeeService {
         Employees employee;
         if (optionalEmployee.isPresent()) {
             employee = optionalEmployee.get();
-            return encryptionService.verifyPassword(request.password(), employee.getPassword()) ? jwtHelper.generateToken(employee.getEmployeeId()) : "Wrong password";
+             if(encryptionService.verifyPassword(request.password(), employee.getPassword())) {
+                 if(Objects.equals(employee.getDepartment().getName(), "Accounts")){
+                     return jwtHelper.generateToken(employee.getEmployeeId());
+                 } else return "Only Accounts Department can access this feature!";
+             } else return "Wrong password";
         }
 
         return "Email not found";
