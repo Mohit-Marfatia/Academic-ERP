@@ -2,6 +2,8 @@ package com.mohitmarfatia.academicerp.dto.employee;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.time.LocalDate;
+
 public record EmployeeResponse(
         @JsonProperty("employee_id")
         Long employeeId,
@@ -25,6 +27,9 @@ public record EmployeeResponse(
         String photographPath,
 
         @JsonProperty("name")
-        String departmentName
+        String departmentName,
+
+        @JsonProperty("paymentDate")
+        LocalDate paymentDate
 ) {
 }

@@ -1,5 +1,6 @@
 package com.mohitmarfatia.academicerp.controller;
 
+import com.mohitmarfatia.academicerp.dto.employee.EmployeeAuthResponse;
 import com.mohitmarfatia.academicerp.dto.employee.EmployeeRequest;
 import com.mohitmarfatia.academicerp.dto.employee.EmployeeResponse;
 import com.mohitmarfatia.academicerp.dto.employee.LoginRequest;
@@ -7,6 +8,7 @@ import com.mohitmarfatia.academicerp.helper.JWTHelper;
 import com.mohitmarfatia.academicerp.service.EmployeeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +27,14 @@ public class EmployeeController {
     }
 
     @PostMapping()
-    public ResponseEntity<String> loginEmployee(@RequestBody @Valid LoginRequest loginRequest) {
-        return ResponseEntity.ok(employeeService.loginCustomer(loginRequest));
+    public ResponseEntity<EmployeeAuthResponse> loginEmployee(@RequestBody @Valid LoginRequest loginRequest) {
+        EmployeeAuthResponse employeeAuthResponse = employeeService.loginCustomer(loginRequest);
+        if (employeeAuthResponse.statusCode() != 201) {
+            return ResponseEntity.ok(employeeService.loginCustomer(loginRequest));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(employeeAuthResponse);
+        }
+
     }
 
     @GetMapping()

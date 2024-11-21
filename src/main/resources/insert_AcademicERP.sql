@@ -13,7 +13,8 @@ INSERT INTO employees (employee_id, first_name, last_name, email, title, photogr
 INSERT INTO employee_salary (id, employee_id, payment_date, amount, description) VALUES
 (1, 1, '2024-11-20', 75000.00, 'October Month Salary'),
 (2, 2, '2024-11-20', 40000.00, 'October Month Salary'),
-(3, 3, '2024-11-20', 50000.00, 'October Month Salary');
+(3, 3, '2024-10-20', 50000.00, 'September Month Salary'),
+(4, 3, '2024-11-20', 50000.00, 'October Month Salary');
 
 INSERT INTO employee_accounts (id, employee_id, employee_balance) VALUES
 (1, 1, 75000.00),
