@@ -1,0 +1,29 @@
+.background-login {
+    background-image: url("../../Assets/background.jpg");
+    background-position: center;
+    background-size: cover;
+    
+}
+
+.bg-card {
+    backdrop-filter: blur(10px) !important;
+    background-color: rgba(10, 10, 10, 0.05) !important;
+}
+
+.login input{
+    background: transparent !important;
+    color:black !important;
+}
+.login input:focus{
+    background: transparent !important;
+}
+.login input:focus ~ label{
+    color:rgba(255, 255, 255, 0.4) !important;
+}
+.login label{
+    color: white !important;
+}
+.login label::after{
+    background: transparent !important;
+    color:rgba(255, 255, 255, 0.5) !important;
+}
