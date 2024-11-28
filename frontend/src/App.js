@@ -1,10 +1,18 @@
-import './App.css';
-import LoginScreen from "./pages/login/Login"
-import 'bootstrap/dist/css/bootstrap.min.css';
-function App() {
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./Pages/Login/Login";
+import Dashboard from "./Dashboard";
+
+const App = () => {
   return (
-    <LoginScreen />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </Router>
   );
-}
+};
 
 export default App;

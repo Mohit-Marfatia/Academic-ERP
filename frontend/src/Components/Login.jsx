@@ -1,32 +1,32 @@
 import React, { useState } from "react";
-import { login } from "../controller/AuthController";
-import { parseErrorMessage } from "../utils/handleErrors";
+import { loginUser } from "../Utils/httputils";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-    console.log("clicked")
-    // e.preventDefault(); // Prevent page refresh
+    e.preventDefault(); // Prevent default form submission
     try {
-      const data = await login(email, password); // Call the Axios-based API
+      const data = await loginUser(email, password);
       localStorage.setItem("jwt", data.token);
       console.log("Login successful:", data);
-      window.location.href = "/dashboard";
+      navigate("/dashboard");
     } catch (err) {
       console.error("Login error:", err);
-      setError(parseErrorMessage(err)); // Use error handling utility
+
+      // Safely set the error message
+      const errorMessage =
+        err.response?.data?.message || err.message || "Login failed. Please try again.";
+      setError(errorMessage);
     }
   };
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleLogin();
-      }}
-    >
+    <form onSubmit={handleLogin}>
       <div className="form-floating mb-3">
         <input
           type="email"
@@ -56,10 +56,7 @@ function Login() {
 
       <button
         type="submit"
-        data-mdb-button-init
-        data-mdb-ripple-init
         className="btn btn-primary btn-block mb-4 my-4 w-100"
-        // onClick=
       >
         Login
       </button>
