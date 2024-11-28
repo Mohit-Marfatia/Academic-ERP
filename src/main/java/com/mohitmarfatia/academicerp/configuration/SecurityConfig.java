@@ -27,10 +27,11 @@ public class SecurityConfig implements WebMvcConfigurer {
         // Add CORS mapping for all endpoints
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000")  // Your frontend URL
-                .allowedMethods("GET", "POST", "PUT", "DELETE")  // Allowed methods
+                .allowedMethods("*")  // Allowed methods
                 .allowedHeaders("*")  // Allow all headers
                 .allowCredentials(true);  // Allow credentials (JWT in headers)
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

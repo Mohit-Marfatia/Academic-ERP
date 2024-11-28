@@ -1,9 +1,6 @@
 package com.mohitmarfatia.academicerp.controller;
 
-import com.mohitmarfatia.academicerp.dto.employee.EmployeeAuthResponse;
-import com.mohitmarfatia.academicerp.dto.employee.EmployeeRequest;
-import com.mohitmarfatia.academicerp.dto.employee.EmployeeResponse;
-import com.mohitmarfatia.academicerp.dto.employee.LoginRequest;
+import com.mohitmarfatia.academicerp.dto.employee.*;
 import com.mohitmarfatia.academicerp.helper.JWTHelper;
 import com.mohitmarfatia.academicerp.service.EmployeeService;
 import jakarta.validation.Valid;
@@ -13,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,5 +29,16 @@ public class EmployeeController {
         String token = authToken.split(" ")[1].trim();
         Long id = jwtHelper.extractUserId(token);
         return ResponseEntity.ok(employeeService.getAllEmployees(id));
+    }
+
+    @PutMapping()
+    public ResponseEntity<String> updateEmployee(@RequestBody @Valid EmployeeResponse request) {
+        return ResponseEntity.ok(employeeService.updateEmployee(request));
+    }
+
+    @PostMapping("/disburse")
+    public ResponseEntity<String> disburseSalary(@RequestBody @Valid EmployeeSalaryRequest empIds) {
+        System.out.println(empIds);
+        return ResponseEntity.ok(employeeService.disburseSalary(empIds));
     }
 }

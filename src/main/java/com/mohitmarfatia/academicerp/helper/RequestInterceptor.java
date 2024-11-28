@@ -3,6 +3,7 @@ package com.mohitmarfatia.academicerp.helper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -14,13 +15,16 @@ public class RequestInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String authorizationHeader = request.getHeader("Authorization");
+        if(HttpMethod.OPTIONS.name().equals(request.getMethod())) { return true;}
 
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
+        System.out.println("---------------------");
+        System.out.println(authorizationHeader);
+        String token = authorizationHeader.split(" ")[1].trim(); // Extract token from "Bearer {token}"
 
-        String token = authorizationHeader.substring(7); // Extract token from "Bearer {token}"
         Long username = jwtUtil.extractUserId(token);
 
         if (username == null || !jwtUtil.validateToken(token)) {
