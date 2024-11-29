@@ -1,19 +1,16 @@
 import { useState, useEffect } from "react";
 import { fetchEmployeesAPI } from "../Utils/httputils";
 import Employee from "../Model/Employee";
-import { useNavigate } from "react-router-dom";
 
 const useEmployeeDetails = () => {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
 
   const fetchEmployees = async () => {
     const token = localStorage.getItem("sessionId");
     try {
       setLoading(true);
-      if (!token) navigate('/');
       const data = await fetchEmployeesAPI();
       console.log(data);
       setEmployees(data.map((emp) => new Employee(emp)));

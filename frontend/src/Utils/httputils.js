@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, Bounce } from 'react-toastify';
 
@@ -29,26 +28,29 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   (response) => response,
+  
   (error) => {
     console.log(error.response.data);
-      if (error) {
-          localStorage.removeItem("sessionId");
-          toast.error(error.response.data.message, {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            transition: Bounce,
-          });
-
-          if(error.response && error.response.data && error.response.data.message.includes("JWT")){
-            toast.error("Your session has expired!", {
+    if (error) {
+      localStorage.removeItem("sessionId");
+        toast.error(error.response.data.message, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
+        
+        
+        if(error.response && error.response.data && error.response.data.error.includes("JWT")){
+            console.log("--------------------" )
+            toast.error("Your session has expired! Please log in again", {
               position: "top-center",
-              autoClose: 3000,
+              autoClose: 5000,
               hideProgressBar: false,
               closeOnClick: true,
               pauseOnHover: true,
@@ -56,13 +58,11 @@ axiosInstance.interceptors.response.use(
               progress: undefined,
               theme: "colored",
               transition: Bounce,
-            });
-            
-            const navigate = useNavigate();
+            }); 
 
             setTimeout(() => {
-              navigate("/");
-            }, 3000);
+              window.location.href = "/";
+            }, 5000);
           }
           return new Promise(() => {});
       }
@@ -91,7 +91,7 @@ export const loginUser = async (email, password) => {
 };
 
 export const disburseSalaries = async (ids) => {
-  const response  = await axiosInstance.post("/employees/disburse",{"empIds":ids});
+  const response  = await axiosInstance.post("/employees/salary",{"empIds":ids});
   console.log(response.data);
   return response;
 };

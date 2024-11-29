@@ -4,6 +4,7 @@ import EmployeeCard from "./EmployeeCard";
 import useEmployeeDetails from "../Hooks/useEmployeeDetails";
 import { updateEmployee, disburseSalaries } from "../Utils/httputils";
 import { toast, Bounce } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 
 const EmployeeList = () => {
@@ -11,7 +12,17 @@ const EmployeeList = () => {
   const [selectedEmployees, setSelectedEmployees] = useState(new Set());
   const [openModal, setOpenModal] = useState(false);
   const [editedEmployee, setEditedEmployee] = useState(null);
-
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const token = localStorage.getItem("sessionId");
+    if (!token) {
+      navigate('/');
+    } else {
+      fetchEmployees();
+    }
+  }, [navigate]);
+  
   const filteredEmployees = employees; 
   const handleCheckboxChange = (event, employee) => {
     const updatedSelection = new Set(selectedEmployees);
@@ -32,7 +43,7 @@ const EmployeeList = () => {
   const handleFormSubmit = async () => {
     try {
       await updateEmployee(editedEmployee);
-      fetchEmployees();
+      await fetchEmployees();
       setOpenModal(false);
       toast.success('Employee Modified', {
         position: "top-center",
@@ -46,17 +57,18 @@ const EmployeeList = () => {
         transition: Bounce,
       });
     } catch (error) {
-      toast.error("Error updating employee: " + error.message, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-        transition: Bounce,
-      });
+      console.log(error.message);
+      // toast.error("Error updating employee: " + error.message, {
+      //   position: "top-center",
+      //   autoClose: 5000,
+      //   hideProgressBar: false,
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      //   theme: "colored",
+      //   transition: Bounce,
+      // });
     }
   };
 
@@ -79,10 +91,6 @@ const EmployeeList = () => {
       });
     }
   };
-
-  useEffect(() => {
-    fetchEmployees();
-  }, []);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p className="error">{error}</p>;

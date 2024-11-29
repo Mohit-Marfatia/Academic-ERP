@@ -36,7 +36,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.updateEmployee(request));
     }
 
-    @PostMapping("/disburse")
+    @PostMapping("/salary")
     public ResponseEntity<String> disburseSalary(@RequestBody @Valid EmployeeSalaryRequest empIds) {
         System.out.println(empIds);
         return ResponseEntity.ok(employeeService.disburseSalary(empIds));
