@@ -7,6 +7,7 @@ import com.mohitmarfatia.academicerp.helper.EncryptionService;
 import com.mohitmarfatia.academicerp.helper.JWTHelper;
 import com.mohitmarfatia.academicerp.helper.exceptions.ResourceNotFoundException;
 import com.mohitmarfatia.academicerp.helper.exceptions.UnauthorizedAccessException;
+import com.mohitmarfatia.academicerp.helper.exceptions.ValidationException;
 import com.mohitmarfatia.academicerp.mapper.EmployeeSalaryMapper;
 import com.mohitmarfatia.academicerp.mapper.EmployeesMapper;
 import com.mohitmarfatia.academicerp.repo.DepartmentsRepo;
@@ -75,9 +76,15 @@ public class EmployeeService {
     public String updateEmployee(EmployeeResponse request) {
         Optional<Employees> optionalEmployee = employeeRepo.findById(request.employeeId());
         if (optionalEmployee.isPresent()) {
-            Employees employee = optionalEmployee.get();
-            employee.setSalary(request.salary());
-            employeeRepo.save(employee);
+            if(request.salary() != null) {
+                Employees employee = optionalEmployee.get();
+                employee.setSalary(request.salary());
+                employeeRepo.save(employee);
+            } else {
+                throw new ValidationException("Salary cannot be null!");
+            }
+        } else{
+            throw new ResourceNotFoundException("Employee not found.");
         }
         return "Updated";
     }
@@ -109,6 +116,7 @@ public class EmployeeService {
 
             } else {
                 System.out.println("Employee with ID " + id + " not found.");
+                throw new ResourceNotFoundException("Employee with ID " + id + " not found.");
             }
         }
 

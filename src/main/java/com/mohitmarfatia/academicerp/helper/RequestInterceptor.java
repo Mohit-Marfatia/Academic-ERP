@@ -1,5 +1,6 @@
 package com.mohitmarfatia.academicerp.helper;
 
+import com.mohitmarfatia.academicerp.helper.exceptions.UnauthorizedAccessException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class RequestInterceptor implements HandlerInterceptor {
 
         if (username == null || !jwtUtil.validateToken(token)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return false;
+            throw new UnauthorizedAccessException("Session not authorized");
         }
 
         return true;

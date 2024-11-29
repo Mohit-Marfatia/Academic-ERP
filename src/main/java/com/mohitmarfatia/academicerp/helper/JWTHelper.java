@@ -13,7 +13,7 @@ import java.util.function.Function;
 
 @Component
 public class JWTHelper {
-    private String SECRET_KEY = "cr666N7wIV+JHnv78pWtcfAekL4YXd9gbnJMs8SJ9sI=";
+    private String SECRET_KEY = "bd090N7wIV+JHnv78pWtcfAekL4YMM9gbnJMs8SJ9sI=";
 
     // Extract username from the token
     public Long extractUserId(String token) {
@@ -45,7 +45,7 @@ public class JWTHelper {
     public String generateToken(Long userId) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("iat", new Date(System.currentTimeMillis()));
-        claims.put("exp", new Date(System.currentTimeMillis() + 1000 * 60 * 60 ));  // Token valid for 1 hour
+        claims.put("exp", new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 5));
         claims.put("sub", userId.toString());
         return createToken(claims);
     }

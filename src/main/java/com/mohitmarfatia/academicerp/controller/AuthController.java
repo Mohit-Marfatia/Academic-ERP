@@ -19,7 +19,7 @@ public class AuthController {
     public ResponseEntity<EmployeeAuthResponse> loginEmployee(@RequestBody @Valid LoginRequest loginRequest) {
         EmployeeAuthResponse employeeAuthResponse = employeeService.loginEmployee(loginRequest);
         if (employeeAuthResponse.statusCode() == 201) {
-            return ResponseEntity.ok(employeeService.loginEmployee(loginRequest));
+            return ResponseEntity.status(201).body(employeeService.loginEmployee(loginRequest));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(employeeAuthResponse);
         }
