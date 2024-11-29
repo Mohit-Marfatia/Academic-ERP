@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ToastContainer, toast, Bounce } from 'react-toastify';
+import { toast, Bounce } from 'react-toastify';
 
 
 const API_BASE_URL = "http://localhost:8080/api/v1";
@@ -15,7 +15,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("jwt");
+    const token = localStorage.getItem("sessionId");
     console.log(token);
     config.headers.Authorization = `Bearer ${token}`;
     console.log(config.headers);
@@ -32,7 +32,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     console.log(error.response.data);
       if (error) {
-          localStorage.removeItem("jwt");
+          localStorage.removeItem("sessionId");
           toast.error(error.response.data.message, {
             position: "top-center",
             autoClose: 5000,
@@ -45,7 +45,7 @@ axiosInstance.interceptors.response.use(
             transition: Bounce,
           });
 
-          if(error.response.data.includes("JWT")){
+          if(error.response && error.response.data && error.response.data.message.includes("JWT")){
             toast.error("Your session has expired!", {
               position: "top-center",
               autoClose: 3000,
@@ -57,8 +57,11 @@ axiosInstance.interceptors.response.use(
               theme: "colored",
               transition: Bounce,
             });
+            
+            const navigate = useNavigate();
+
             setTimeout(() => {
-              window.location.href = "/";
+              navigate("/");
             }, 3000);
           }
           return new Promise(() => {});
@@ -81,7 +84,7 @@ export const updateEmployee = async (employee) => {
 
 export const loginUser = async (email, password) => {
   const response = await axiosInstance.post("/auth", { email, password });
-  localStorage.setItem("jwt",response.data.token);
+  localStorage.setItem("sessionId",response.data.token);
   console.log("token after login: ");
   console.log(response.data.token);
   return response.data;
@@ -89,5 +92,7 @@ export const loginUser = async (email, password) => {
 
 export const disburseSalaries = async (ids) => {
   const response  = await axiosInstance.post("/employees/disburse",{"empIds":ids});
+  console.log(response.data);
   return response;
 };
+

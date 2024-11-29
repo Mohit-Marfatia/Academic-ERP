@@ -1,27 +1,33 @@
 import React, { useState } from "react";
 import { loginUser } from "../Utils/httputils";
 import { useNavigate } from "react-router-dom";
+import {toast, Bounce} from "react-toastify";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault(); // Prevent default form submission
     try {
       const data = await loginUser(email, password);
-      localStorage.setItem("jwt", data.token);
+      localStorage.setItem("sessionId", data.token);
       console.log("Login successful:", data);
       navigate("/dashboard");
     } catch (err) {
       console.error("Login error:", err);
-
-      // Safely set the error message
-      const errorMessage =
-        err.response?.data?.message || err.message || "Login failed. Please try again.";
-      setError(errorMessage);
+        toast.error("Login error:" + err.message, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
+        });
     }
   };
 
@@ -51,8 +57,6 @@ function Login() {
         />
         <label htmlFor="floatingPassword">Password</label>
       </div>
-
-      {error && <p className="text-danger mt-3">{error}</p>}
 
       <button
         type="submit"

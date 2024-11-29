@@ -10,12 +10,12 @@ const useEmployeeDetails = () => {
   const navigate = useNavigate();
 
   const fetchEmployees = async () => {
-    const token = localStorage.getItem("jwt");
+    const token = localStorage.getItem("sessionId");
     try {
       setLoading(true);
       if (!token) navigate('/');
       const data = await fetchEmployeesAPI();
-
+      console.log(data);
       setEmployees(data.map((emp) => new Employee(emp)));
     } catch (err) {
       setError(err.message);
