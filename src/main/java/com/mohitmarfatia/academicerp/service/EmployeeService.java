@@ -98,7 +98,7 @@ public class EmployeeService {
 
                 employeeSalaryRepo.save(employeeSalary);
 
-                EmployeeAccounts employeeAccount = employeeAccountRepo.findByEmployee(employee);
+                EmployeeAccounts employeeAccount = employeeAccountRepo.findById(employee.getEmployeeId()).orElse(null);
 
                 if (employeeAccount == null) {
                     EmployeeAccounts newEmployeeAccount = new EmployeeAccounts();
@@ -109,6 +109,7 @@ public class EmployeeService {
 
                     employeeAccountRepo.save(newEmployeeAccount);
                 } else {
+                    System.out.println("here.........");
                     employeeAccount.setEmployeeBalance(employeeAccount.getEmployeeBalance() + employeeSalary.getAmount());
 
                     employeeAccountRepo.save(employeeAccount);
