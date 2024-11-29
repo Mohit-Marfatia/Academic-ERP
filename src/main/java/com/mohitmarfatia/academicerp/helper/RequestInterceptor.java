@@ -21,8 +21,8 @@ public class RequestInterceptor implements HandlerInterceptor {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
-        System.out.println("---------------------");
-        System.out.println(authorizationHeader);
+//        System.out.println("---------------------");
+//        System.out.println(authorizationHeader);
         String token = authorizationHeader.split(" ")[1].trim(); // Extract token from "Bearer {token}"
 
         Long username = jwtUtil.extractUserId(token);

@@ -22,8 +22,8 @@ public class EmployeesMapper {
 //        System.out.println(salaries.get(salaries.size()-1));
         LocalDate paymentDate =
                 employees.getSalaries().stream()
-                .max(Comparator.comparing(EmployeeSalary::getPaymentDate)) // Find the latest payment date
-                .map(EmployeeSalary::getPaymentDate) // Extract the date
+                .max(Comparator.comparing(EmployeeSalary::getPaymentDate))
+                .map(EmployeeSalary::getPaymentDate)
                 .orElse(null);
         return new EmployeeResponse(
                 employees.getEmployeeId(),

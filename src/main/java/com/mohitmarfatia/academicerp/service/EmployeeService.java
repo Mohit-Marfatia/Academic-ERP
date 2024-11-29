@@ -5,6 +5,8 @@ import com.mohitmarfatia.academicerp.entity.EmployeeAccounts;
 import com.mohitmarfatia.academicerp.entity.EmployeeSalary;
 import com.mohitmarfatia.academicerp.helper.EncryptionService;
 import com.mohitmarfatia.academicerp.helper.JWTHelper;
+import com.mohitmarfatia.academicerp.helper.exceptions.ResourceNotFoundException;
+import com.mohitmarfatia.academicerp.helper.exceptions.UnauthorizedAccessException;
 import com.mohitmarfatia.academicerp.mapper.EmployeeSalaryMapper;
 import com.mohitmarfatia.academicerp.mapper.EmployeesMapper;
 import com.mohitmarfatia.academicerp.repo.DepartmentsRepo;
@@ -15,7 +17,6 @@ import com.mohitmarfatia.academicerp.repo.EmployeeSalaryRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -40,11 +41,13 @@ public class EmployeeService {
             Employees mapperEntity = employeesMapper.toAuthEntity(request);
             employee.setPassword(encryptionService.encodePassword(mapperEntity.getPassword()));
             employeeRepo.save(employee);
+        } else {
+            throw new ResourceNotFoundException("Employee not found with email: " + request.email());
         }
         return "Password updated";
     }
 
-    public EmployeeAuthResponse loginCustomer(LoginRequest request) {
+    public EmployeeAuthResponse loginEmployee(LoginRequest request) {
         Optional<Employees> optionalEmployee = employeeRepo.findByEmail(request.email());
 
         Employees employee;
@@ -54,11 +57,11 @@ public class EmployeeService {
                 if (Objects.equals(employee.getDepartment().getName(), "Accounts")) {
                     return new EmployeeAuthResponse(jwtHelper.generateToken(employee.getEmployeeId()), "Login Successful", 201);
                 } else
-                    return new EmployeeAuthResponse("null", "Only Accounts Department can access this feature!", 401);
-            } else return new EmployeeAuthResponse("null", "Wrong Password!", 401);
+                    throw new UnauthorizedAccessException("Only Accounts Department can access this feature!");
+            } else throw new UnauthorizedAccessException("Wrong Password!");
+        } else{
+            throw new UnauthorizedAccessException("Email not found!");
         }
-
-        return new EmployeeAuthResponse("null", "Email not found!", 401);
     }
 
     public List<EmployeeResponse> getAllEmployees(Long id) {

@@ -17,9 +17,9 @@ public class AuthController {
 
     @PostMapping()
     public ResponseEntity<EmployeeAuthResponse> loginEmployee(@RequestBody @Valid LoginRequest loginRequest) {
-        EmployeeAuthResponse employeeAuthResponse = employeeService.loginCustomer(loginRequest);
+        EmployeeAuthResponse employeeAuthResponse = employeeService.loginEmployee(loginRequest);
         if (employeeAuthResponse.statusCode() == 201) {
-            return ResponseEntity.ok(employeeService.loginCustomer(loginRequest));
+            return ResponseEntity.ok(employeeService.loginEmployee(loginRequest));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(employeeAuthResponse);
         }
