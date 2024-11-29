@@ -9,7 +9,7 @@ const EmployeeCard = ({ employee, isSelected, onCheckboxChange, onModifyClick })
       .join("");
     return initials.toUpperCase();
   };
-  
+
   return (
     <div className="card mb-3 shadow-sm p-3">
       <div className="row align-items-center">
@@ -39,7 +39,7 @@ const EmployeeCard = ({ employee, isSelected, onCheckboxChange, onModifyClick })
         <div className="col">
           <h5 className="mb-1">{employee.fullName()}</h5>
           <p className="mb-0 text-muted">
-            {employee.title} — {employee.email}
+            {employee.name} | {employee.title} | {employee.email}
           </p>
         </div>
 

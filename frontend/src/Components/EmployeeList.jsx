@@ -12,8 +12,9 @@ const EmployeeList = () => {
   const [selectedEmployees, setSelectedEmployees] = useState(new Set());
   const [openModal, setOpenModal] = useState(false);
   const [editedEmployee, setEditedEmployee] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     const token = localStorage.getItem("sessionId");
     if (!token) {
@@ -22,8 +23,18 @@ const EmployeeList = () => {
       fetchEmployees();
     }
   }, [navigate]);
-  
-  const filteredEmployees = employees; 
+
+  const filteredEmployees = employees.filter(
+    (employee) => {
+      const employee_name = employee.first_name.toLowerCase()+ " " + employee.last_name.toLowerCase()
+      return employee_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        employee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        employee.title.toLowerCase().includes(searchQuery.toLowerCase())
+        
+    }
+      
+  );
+
   const handleCheckboxChange = (event, employee) => {
     const updatedSelection = new Set(selectedEmployees);
     event.target.checked ? updatedSelection.add(employee) : updatedSelection.delete(employee);
@@ -38,6 +49,10 @@ const EmployeeList = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedEmployee((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
   };
 
   const handleFormSubmit = async () => {
@@ -58,17 +73,6 @@ const EmployeeList = () => {
       });
     } catch (error) {
       console.log(error.message);
-      // toast.error("Error updating employee: " + error.message, {
-      //   position: "top-center",
-      //   autoClose: 5000,
-      //   hideProgressBar: false,
-      //   closeOnClick: true,
-      //   pauseOnHover: true,
-      //   draggable: true,
-      //   progress: undefined,
-      //   theme: "colored",
-      //   transition: Bounce,
-      // });
     }
   };
 
@@ -97,20 +101,29 @@ const EmployeeList = () => {
 
   return (
     <div>
-        {filteredEmployees.map((employee) => (
-          <EmployeeCard
-            key={employee.employee_id}
-            employee={employee}
-            isSelected={selectedEmployees.has(employee)}
-            onCheckboxChange={handleCheckboxChange}
-            onModifyClick={handleModifyClick}
-          />
-        ))}
+      <div className="mb-3">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search Employee"
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+      </div>
+
+      {filteredEmployees.map((employee) => (
+        <EmployeeCard
+          key={employee.employee_id}
+          employee={employee}
+          isSelected={selectedEmployees.has(employee)}
+          onCheckboxChange={handleCheckboxChange}
+          onModifyClick={handleModifyClick}
+        />
+      ))}
 
       <Modal open={openModal} onClose={() => setOpenModal(false)}>
-      <div className="container" style={{ width: '400px', padding: '16px', backgroundColor: 'white', margin: 'auto', marginTop: '15%' }}>
-          <h6>Edit Employee</h6>
-
+        <div className="container" style={{ width: '400px', padding: '16px', backgroundColor: 'white', margin: 'auto', marginTop: '15%' }}>
+          <h4>Edit Employee</h4>
           <div className="mb-3">
             <label htmlFor="first_name" className="form-label">First Name</label>
             <input 
@@ -187,15 +200,13 @@ const EmployeeList = () => {
               disabled 
             />
           </div>
-
           <button className="btn btn-primary" onClick={handleFormSubmit}>Save Changes</button>
         </div>
-
       </Modal>
 
       {selectedEmployees.size > 0 && (
         <div className="d-flex justify-content-end mb-2">
-          <button className="btn btn-success" onClick={handleDisburse}>
+          <button className="btn btn-outline-success" onClick={handleDisburse}>
             Disburse
           </button>
         </div>
