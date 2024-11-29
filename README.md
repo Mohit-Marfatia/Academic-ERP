@@ -54,7 +54,7 @@ The frontend provides a seamless interface for managing salaries:
 
 2. **Employee Management**:
    - After logging in, users can view all employee profiles.
-   - Employees belonging to the **Faculty** department have a checkbox next to their profiles.
+   - Employees belonging to the faculty department have a checkbox next to their profiles.
    - Selecting faculty members enables the **Disburse** button, which allows salary disbursement for the selected individuals.
 
 3. **Additional Features**:
