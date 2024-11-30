@@ -18,6 +18,7 @@ import com.mohitmarfatia.academicerp.repo.EmployeeSalaryRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -91,36 +92,26 @@ public class EmployeeService {
 
     public String disburseSalary(EmployeeSalaryRequest request) {
         for (Long id : request.empIds()) {
-            Employees employee = employeeRepo.findById(id).orElse(null);
+            Employees employee = employeeRepo.findById(id).orElseThrow(() ->
+                    new ResourceNotFoundException("Employee with ID " + id + " not found.")
+            );
 
-            if (employee != null) {
-                EmployeeSalary employeeSalary = employeeSalaryMapper.toEntity(employee);
+            EmployeeSalary employeeSalary = employeeSalaryMapper.toEntity(employee);
 
-                employeeSalaryRepo.save(employeeSalary);
+            employeeSalaryRepo.save(employeeSalary);
 
-                EmployeeAccounts employeeAccount = employeeAccountRepo.findById(employee.getEmployeeId()).orElse(null);
-
-                if (employeeAccount == null) {
-                    EmployeeAccounts newEmployeeAccount = new EmployeeAccounts();
-                    newEmployeeAccount.setEmployee(employee);
-                    newEmployeeAccount.setEmployeeBalance(0.0);
-
-                    newEmployeeAccount.setEmployeeBalance(newEmployeeAccount.getEmployeeBalance() + employeeSalary.getAmount());
-
-                    employeeAccountRepo.save(newEmployeeAccount);
-                } else {
-                    System.out.println("here.........");
-                    employeeAccount.setEmployeeBalance(employeeAccount.getEmployeeBalance() + employeeSalary.getAmount());
-
-                    employeeAccountRepo.save(employeeAccount);
-                }
-
+            EmployeeAccounts employeeAccount = employeeAccountRepo.findByEmployee(employee);
+            if (employeeAccount == null) {
+                EmployeeAccounts newEmployeeAccount = new EmployeeAccounts();
+                newEmployeeAccount.setEmployee(employee);
+                newEmployeeAccount.setEmployeeBalance(employeeSalary.getAmount());
+                employeeAccountRepo.save(newEmployeeAccount);
             } else {
-                System.out.println("Employee with ID " + id + " not found.");
-                throw new ResourceNotFoundException("Employee with ID " + id + " not found.");
+                employeeAccount.setEmployeeBalance(employeeAccount.getEmployeeBalance() + employeeSalary.getAmount());
+                employeeAccountRepo.save(employeeAccount);
             }
         }
-
         return "Salary disbursement completed for selected employees.";
     }
+
 }
