@@ -6,9 +6,10 @@ INSERT INTO departments (department_id, name, capacity) VALUES
 (3, 'MLAI', 10);
 
 INSERT INTO employees (employee_id, first_name, last_name, email, title, photograph_path, salary, department, password) VALUES
-(1, 'John','Doe','john.doe@academicuni.ac.in', 'Dean', '/images/john_doe.png', 75000, 1, 'null'),
+(1, 'John','Doe','john.doe@academicuni.ac.in', 'Professor', '/images/john_doe.png', 75000, 1, 'null'),
 (2, 'Jane','Doe','jane.doe@academicuni.ac.in', 'Professor', '/images/jane_doe.png', 40000, 2, 'null'),
-(3, 'John','Smith','john.smith@academicuni.ac.in', 'Professor', '/images/john_smith.png', 50000, 3, 'null');
+(3, 'John','Smith','john.smith@academicuni.ac.in', 'Professor', '/images/john_smith.png', 50000, 3, 'null'),
+(4, 'Jane','Smith','jane.smith@academicuni.ac.in', 'Assistant Professor', '/images/jane_smith.png', 50000, 2, 'null');
 
 INSERT INTO employee_salary (id, employee_id, payment_date, amount, description) VALUES
 (1, 1, '2024-11-20', 75000.00, 'October Month Salary'),
